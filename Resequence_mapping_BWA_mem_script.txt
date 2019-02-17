@@ -1,0 +1,6 @@
+bwa mem -M -R '@RG\tID:foo\tSM:bar\tPL:Illumina' -t 6 Reference_genome.fasta Cultivar_1.fq.gz Cultivar_2.fq.gz > Cultivar_RG.sam
+samtools view -@ 4 -bS Cultivar_RG.sam > Cultivar_RG.bam 
+samtools sort -@ 4 Cultivar_RG.bam -o Cultivar_RG_sort.bam
+samtools index -@ 4 Cultivar_RG_sortt.bam
+java -Xmx64G -jar gatk-package-4.0.2.1-local.jar MarkDuplicates -I Cultivar_RG_sort.bam -O Cultivar_RG_sort_redup.bam -M Cultivar_RG_sort_redup.txt
+samtools index -@ 4 Cultivar_RG_sort_redup.bam

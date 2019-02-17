@@ -1,0 +1,16 @@
+bwa aln -t 4 Reference_genome.fasta  P1_unique_tag1over.fasta > P1_unique_tag1over.sai
+bwa samse Reference_genome.fasta P1_unique_tag1over.sai P1_unique_tag1over.fasta > P1_unique_tag1over_aln.sam
+samtools view -S -F 4 -S P1_unique_tag1over_aln.sam > P1_unique_tag1over_mapped_aln.sam
+samtools view -S -f 4 -F 0 -F 16 -S P1_unique_tag1over_aln.sam > P1_unique_tag1over_unmapped_aln.sam
+
+bwa aln -t 4 Reference_genome.fasta  P2_unique_tag1over.fasta > P2_unique_tag1over.sai
+bwa samse Reference_genome.fasta P2_unique_tag1over.sai P2_unique_tag1over.fasta > P2_unique_tag1over_aln.sam
+samtools view -S -F 4 -S P2_unique_tag1over_aln.sam > P2_unique_tag1over_mapped_aln.sam
+samtools view -S -f 4 -F 0 -F 16 -S P2_unique_tag1over_aln.sam > P2_unique_tag1over_unmapped_aln.sam
+
+bwa aln -t 4 Reference_genome.fasta  P1P2_common_tag1over.fasta > P1P2_common_tag1over.sai
+bwa samse Reference_genome.fasta P1P2_common_tag1over.sai P1P2_common_tag1over.fasta > P1P2_common_tag1over_aln.sam
+samtools view -S -F 4 -S P1P2_common_tag1over_aln.sam > P1P2_common_tag1over_mapped_aln.sam
+samtools view -S -f 4 -F 0 -F 16 -S P1P2_common_tag1over_aln.sam > P1P2_common_tag1over_unmapped_aln.sam
+
+

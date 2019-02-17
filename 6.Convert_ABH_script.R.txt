@@ -1,0 +1,54 @@
+geno <- read.csv("path/RAD-seq/NGS_Data_Analysis_folder/Genotype.csv")
+Parent <- substring(geno$Marker, 1,2)
+Pageno <- cbind(Parent, geno)
+id <- paste(geno[1:nrow(geno), 7],geno[1:nrow(geno), 8], sep="_")
+Paid <- paste(Parent,id, sep="*")
+idPageno <- cbind(id, Pageno)
+PaididPageno <- cbind(Paid, idPageno)
+Number <- paste(1:nrow(PaididPageno))
+NuPaididPageno <- cbind(Number, PaididPageno)
+write.csv(table(NuPaididPageno$Paid), "path/RAD-seq/NGS_Data_Analysis_folder/Genotype_table.csv", row.names=F)
+table <- read.csv("path/RAD-seq/NGS_Data_Analysis_folder/Genotype_table.csv", col.names=c("table","freq"))
+file.remove("path/RAD-seq/NGS_Data_Analysis_folder/Genotype_table.csv")
+table <- subset(table,freq<2)
+unique <- NuPaididPageno[match(table$table, NuPaididPageno$Paid),]
+write.csv(unique, "path/RAD-seq/NGS_Data_Analysis_folder/Genotype_unique.csv", row.names=F)
+unique <- read.csv("path/RAD-seq/NGS_Data_Analysis_folder/Genotype_unique.csv")
+file.remove("path/RAD-seq/NGS_Data_Analysis_folder/Genotype_unique.csv")
+unique <- unique[order(unique$Number),]
+write.csv(table(unique$id), "path/RAD-seq/NGS_Data_Analysis_folder/Genotype_table.csv", row.names=F)
+table <- read.csv("path/RAD-seq/NGS_Data_Analysis_folder/Genotype_table.csv", col.names=c("table","freq"))
+file.remove("path/RAD-seq/NGS_Data_Analysis_folder/Genotype_table.csv")
+table <- subset(table,freq==2)
+P1unique <- unique[unique$Parent=="P1",]
+P2unique <- unique[unique$Parent=="P2",]
+P1 <- P1unique[match(table$table, P1unique$id),]
+P2 <- P2unique[match(table$table, P2unique$id),]
+P1[1:nrow(P1),15:ncol(P1)][P1[1:nrow(P1),15:ncol(P1)]>0] <- "A"
+P2[1:nrow(P2),15:ncol(P2)][P2[1:nrow(P2),15:ncol(P2)]>0] <- "B"
+P1[1:nrow(P1),15:ncol(P1)][P1[1:nrow(P1),15:ncol(P1)]==P2[1:nrow(P2),15:ncol(P2)]] <- "-"
+P2[1:nrow(P2),15:ncol(P2)][P1[1:nrow(P1),15:ncol(P1)]=="-"] <- "-"
+P1[1:nrow(P1),15:ncol(P1)][P1[1:nrow(P1),15:ncol(P1)]==0] <- "B"
+P2[1:nrow(P2),15:ncol(P2)][P2[1:nrow(P2),15:ncol(P2)]==0] <- "A"
+P2[1:nrow(P2),15:ncol(P2)][P1[1:nrow(P1),15:ncol(P1)]!=P2[1:nrow(P2),15:ncol(P2)]] <- "H"
+P1head <- P1[1:nrow(P1),1:14]
+P1P2 <- cbind(P1head, P2)
+P1P2 <- P1P2[order(P1P2$Number),]
+CSVS <- P1P2[,-(1:2)]
+CSVS <- CSVS[,-(2:8)]
+CSVS <- CSVS[,-(3:19)]
+CSVS <- t(CSVS)
+write.csv(CSVS, "path/RAD-seq/NGS_Data_Analysis_folder/Genotype_csvs.csv")
+CSVS <- read.csv("path/RAD-seq/NGS_Data_Analysis_folder/Genotype_csvs.csv", skip=1)
+CSVS[1,1] <- "NA"
+write.csv(CSVS, "path/RAD-seq/NGS_Data_Analysis_folder/Genotype_csvs.csv", row.names=F, na = "  ")
+
+
+
+
+
+
+
+
+
+
